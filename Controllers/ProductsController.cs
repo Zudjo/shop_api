@@ -55,12 +55,36 @@ public class ProductsController
         query.AppendFormat("INSERT INTO products VALUES ({0}, '{1}', {2})", product.Id, product.Name, product.Price);
         try
         {
-            return new JsonResult(Db.ExecuteReader(query.ToString()));
+            if (Db.ExecuteNonQuery(query.ToString()) == 1)
+            {
+                return new JsonResult("Record added");
+            }
+            return new JsonResult("Make sure this id doesn't exist already");
         } catch(MySqlConnector.MySqlException e)
         {
             return new JsonResult(e.Message);
         }
         
     }
+
+    [HttpPost("products/{Id}/{Price}/{Name}")]
+    public JsonResult UpdateProducts(int Id, int Price, string Name)
+    {
+        StringBuilder query = new StringBuilder();
+        query.AppendFormat("UPDATE products SET Price = {0}, Name = '{1}' WHERE Id = {2})", Name, Price, Id);
+        try
+        {
+            if (Db.ExecuteNonQuery(query.ToString()) == 1)
+            {
+                return new JsonResult("Record updated");
+            }
+            return new JsonResult("This id doesn't exist");
+        } catch(MySqlConnector.MySqlException e)
+        {
+            return new JsonResult(e.Message);
+        }
+        
+    }
+
 
 }

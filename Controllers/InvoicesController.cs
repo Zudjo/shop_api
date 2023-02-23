@@ -38,7 +38,11 @@ public class InvoicesController
         query.AppendFormat("INSERT INTO invoices VALUES ({0})", invoice.Id);
         try
         {
-            return new JsonResult(Db.ExecuteNonQuery(query.ToString()));
+            if (Db.ExecuteNonQuery(query.ToString()) == 1)
+            {
+                return new JsonResult("Record added");
+            }
+            return new JsonResult("Make sure this id doesn't exist already");
         } catch(MySqlConnector.MySqlException e)
         {
             return new JsonResult(e.Message);

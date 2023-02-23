@@ -36,17 +36,17 @@ public class InvoicesProductsController
         
     }
 
-    [HttpGet("invoices-products/{invoice-id}")]
-    public JsonResult getInvoicesProductsById(int id)
+    [HttpGet("invoices-products/{invoiceId}")]
+    public JsonResult getInvoicesProductsById(int invoiceId)
     {
-        if (!ThereIsId(id))
+        if (!ThereIsId(invoiceId))
         {
             return new JsonResult("This invoice id doesn't exists.");
         }
         try
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendFormat("SELECT * FROM invoices_products WHERE id_invoice = {0}", id);
+            sb.AppendFormat("SELECT * FROM invoices_products WHERE id_invoice = {0}", invoiceId);
             return new JsonResult(Db.ExecuteReader(sb.ToString()));
 
         } catch(MySqlConnector.MySqlException e)
@@ -61,11 +61,34 @@ public class InvoicesProductsController
     public JsonResult setInvoicesProducts(InvoicesProducts invoices_products)
     {
         StringBuilder query = new StringBuilder();
-        query.AppendFormat("INSERT INTO invoices_products VALUES ({0}, '{1}', {2})",
+        query.AppendFormat("INSERT INTO invoices_products VALUES ({0}, {1}, {2})",
             invoices_products.IdInvoice, invoices_products.IdProduct, invoices_products.Quantity);
         try
         {
-            return new JsonResult(Db.ExecuteNonQuery(query.ToString()));
+            if (Db.ExecuteNonQuery(query.ToString()) == 1)
+            {
+                return new JsonResult("Record added");
+            }
+            return new JsonResult("Make sure this id couple doesn't exist already");
+        } catch(MySqlConnector.MySqlException e)
+        {
+            return new JsonResult(e.Message);
+        }
+    }
+
+    [HttpPost("invoices-products/{invoiceId}/{productId}/{quantity}")] // update quantity of a invoices-products record
+    public JsonResult updateInvoicesProducts(int invoiceId, int productId, int quantity)
+    {
+        StringBuilder query = new StringBuilder();
+        query.AppendFormat("UPDATE invoices_products SET Quantity = {0} WHERE IdInvoice = {1} AND IdProduct = {2}",
+            quantity, invoiceId, productId);
+        try
+        {
+            if (Db.ExecuteNonQuery(query.ToString()) == 1)
+            {
+                return new JsonResult("Record updated");
+            }
+            return new JsonResult("This id couple doesn't exist.");
         } catch(MySqlConnector.MySqlException e)
         {
             return new JsonResult(e.Message);
