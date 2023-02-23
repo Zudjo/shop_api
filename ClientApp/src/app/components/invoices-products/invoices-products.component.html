@@ -1,0 +1,17 @@
+<div>
+<table *ngFor="let invoiceWorker of invoiceWorkers">
+    <th colspan="4">invoice {{ invoiceWorker.id }}</th>
+    <tr>
+        <th>product id</th>
+        <th>name</th>
+        <th>price</th>
+        <th>quantity</th>
+    </tr>
+    <tr *ngFor="let productInInvoice of invoiceWorker.productsInInvoice">
+        <td>{{ productInInvoice.id }}</td>
+        <td>{{ productInInvoice.name }}</td>
+        <td>{{ productInInvoice.price }}</td>
+        <td>{{ productInInvoice.quantity }}</td>
+    </tr>
+</table>
+</div>

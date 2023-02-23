@@ -1,6 +1,9 @@
-<body>
-  <app-nav-menu></app-nav-menu>
-  <main class="container">
-    <router-outlet></router-outlet>
-  </main>
-</body>
+<button (click)="showComponent('invoices')">Show invoices</button>
+<button (click)="showComponent('products')">Show products</button>
+<button (click)="showComponent('invoicesProducts')">Show invoices with products</button>
+
+<div id="output">
+    <invoices-products *ngIf="showInvoicesProducts"></invoices-products>
+    <invoices *ngIf="showInvoices"></invoices>
+    <products *ngIf="showProducts"></products>
+</div>
