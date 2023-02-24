@@ -86,5 +86,26 @@ public class ProductsController
         
     }
 
+    // DELETE REQUEST
+    [HttpDelete("products/{Id}")]
+    public JsonResult deleteProducts(int Id)
+    {
+        StringBuilder query = new StringBuilder();
+        query.AppendFormat("DELETE FROM products WHERE Id = {0}",
+            Id);
+        try
+        {
+            if (Db.ExecuteNonQuery(query.ToString()) == 1)
+            {
+                return new JsonResult("Record deleted");
+            }
+            return new JsonResult("This id doesn't exist.");
+        } catch(MySqlConnector.MySqlException e)
+        {
+            return new JsonResult(e.Message);
+        }
+    }
+
+
 
 }

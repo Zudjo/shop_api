@@ -95,6 +95,27 @@ public class InvoicesProductsController
         }
     }
 
+    // DELETE REQUEST
+    [HttpDelete("invoices-products/{invoiceId}/{productId}")]
+    public JsonResult deleteInvoicesProducts(int invoiceId, int productId)
+    {
+        StringBuilder query = new StringBuilder();
+        query.AppendFormat("DELETE FROM invoices_products WHERE IdInvoice = {0} AND IdProduct = {1}",
+            invoiceId, productId);
+        try
+        {
+            if (Db.ExecuteNonQuery(query.ToString()) == 1)
+            {
+                return new JsonResult("Record deleted");
+            }
+            return new JsonResult("This id couple doesn't exist.");
+        } catch(MySqlConnector.MySqlException e)
+        {
+            return new JsonResult(e.Message);
+        }
+    }
+
+
     // UTILITIES
     private bool ThereIsId(int id)
     {

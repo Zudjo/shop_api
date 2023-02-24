@@ -16,19 +16,11 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseCors("CORSPolicy");
 
 app.MapControllers();
-
-// app.UseStaticFiles();
-// app.UseRouting();
-
-// app.MapFallbackToFile("index.html");
 
 app.Run();

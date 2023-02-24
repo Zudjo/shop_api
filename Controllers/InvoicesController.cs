@@ -50,4 +50,25 @@ public class InvoicesController
         
     }
 
+    // DELETE REQUEST
+    [HttpDelete("invoices/{Id}")]
+    public JsonResult deleteInvoices(int Id)
+    {
+        StringBuilder query = new StringBuilder();
+        query.AppendFormat("DELETE FROM invoices WHERE Id = {0}",
+            Id);
+        try
+        {
+            if (Db.ExecuteNonQuery(query.ToString()) == 1)
+            {
+                return new JsonResult("Record deleted");
+            }
+            return new JsonResult("This id doesn't exist.");
+        } catch(MySqlConnector.MySqlException e)
+        {
+            return new JsonResult(e.Message);
+        }
+    }
+
+
 }

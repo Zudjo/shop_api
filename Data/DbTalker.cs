@@ -6,7 +6,12 @@ namespace shop_api.Data;
 public class DbTalker
 {
     private MySqlConnection Connection { get; }
-    private string ConnectionString = "Server=127.0.0.1;User ID=root;Password=;Port=3306;Database=shop_api";
+    private string ConnectionString = @"
+        Server=127.0.0.1;
+        User ID=root;
+        Password=;
+        Port=3306;
+        Database=shop_api";
 
     public DbTalker()
     {
